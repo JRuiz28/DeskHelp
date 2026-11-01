@@ -1,4 +1,5 @@
 ﻿using DeskHelp.DataSets.HelpDeskDataSetTableAdapters;
+using DeskHelp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,27 @@ namespace DeskHelp.Services
             var user = users[0];
 
             return user.password == password;
+        }
+
+        public UserModel GetUserByEmail(string email)
+        {
+            var users = userAdapter.GetDataByEmail(email);
+
+            if (users.Count == 0)
+            {
+                return null;
+            }
+
+            var user = users[0];
+
+            return new UserModel
+            {
+                ID = user.pk_user_id,
+                Name = user.name,
+                Email = user.email,
+                Role = user.role,
+                State = user.State
+            };
         }
     }
 }

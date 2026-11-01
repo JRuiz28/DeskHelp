@@ -12,6 +12,24 @@ namespace DeskHelp.Controllers
     {
         private UserService userService = new UserService();
 
+        private UserModel GetCurrentUser()
+        {
+            var UserLogged = Session["User"] as UserModel;
+            return UserLogged;
+        }
+
+        private void logInUser(UserModel user)
+        {
+            Session["User"] = user;
+        }
+
+        private void logOutUser()
+        {
+            Session["User"] = null;
+            Session.Clear();
+            Session.Abandon();
+        }
+
         [HttpGet]
         public ActionResult Login()
         {
@@ -24,9 +42,11 @@ namespace DeskHelp.Controllers
             try
             {
                 bool validUser = userService.ValidateUser(model.Email, model.Password);
+                UserModel user = userService.GetUserByEmail(model.Email);
 
-                if (validUser)
+                if (validUser && user != null && user.State)
                 {
+                    logInUser(user);
                     return RedirectToAction("Index", "Home");
                 }
 
