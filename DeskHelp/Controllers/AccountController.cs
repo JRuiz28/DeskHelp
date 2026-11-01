@@ -23,11 +23,13 @@ namespace DeskHelp.Controllers
             Session["User"] = user;
         }
 
-        private void logOutUser()
+        [HttpGet]
+        public ActionResult LogoutUser()
         {
-            Session["User"] = null;
             Session.Clear();
             Session.Abandon();
+
+            return RedirectToAction("Login", "Account");
         }
 
         [HttpGet]

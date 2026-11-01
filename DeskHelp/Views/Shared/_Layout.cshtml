@@ -22,18 +22,41 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Acerca de", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
+
+                    @if (Session["User"] != null)
+                    {
+                        var user = Session["User"] as DeskHelp.Models.UserModel;
+
+                        if (user.Role == "Administrador")
+                        {
+                            <li>
+                                @Html.ActionLink("Administración", "Index", "Admin")
+                            </li>
+                        }
+
+                        if (user.Role == "Usuario")
+                        {
+                            <li>
+                                @Html.ActionLink("Mis tickets", "Index", "Tickets")
+                            </li>
+                        }
+                    }
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    @if (Session["User"] != null)
+                    {
+                        <li>
+                            @Html.ActionLink( "Cerrar sesión", "LogoutUser", "Account")
+                        </li>
+                    }
                 </ul>
             </div>
         </div>
     </div>
+    <br />
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Mi aplicación ASP.NET</p>
-        </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
