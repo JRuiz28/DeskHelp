@@ -13,6 +13,8 @@ namespace DeskHelp.Controllers
         private TicketService ticketService = new TicketService();
         private CommentService commentService = new CommentService();
 
+
+        //---------------- USER ROLE -----------------
         public ActionResult Index()
         {
             if (Session["User"] == null)
@@ -62,6 +64,30 @@ namespace DeskHelp.Controllers
             }
         }
 
+
+        //---------------- ADMIN ROLE -----------------
+        public ActionResult AdminIndex()
+        {
+            if (Session["User"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            UserModel user = Session["User"] as UserModel;
+
+            if (user.Role != "Administrador")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var tickets = ticketService.GetAllTickets();
+
+            return View(tickets);
+        }
+
+    
+        // -----------------------------------------------------
+
         [HttpGet]
         public ActionResult Details(int id)
         {
@@ -82,7 +108,16 @@ namespace DeskHelp.Controllers
 
                 UserModel user = Session["User"] as UserModel;
 
-                var tickets = ticketService.GetTicketsByUser(user.ID);
+                List<TicketModel> tickets;
+
+                if (user.Role == "Administrador")
+                {
+                    tickets = ticketService.GetAllTickets();
+                }
+                else
+                {
+                    tickets = ticketService.GetTicketsByUser(user.ID);
+                }
 
                 var ticket = tickets.FirstOrDefault(t => t.ID == id);
 
@@ -105,8 +140,17 @@ namespace DeskHelp.Controllers
                 }
 
                 UserModel user = Session["User"] as UserModel;
-                
-                var tickets = ticketService.GetTicketsByUser(user.ID);
+
+                List<TicketModel> tickets;
+
+                if (user.Role == "Administrador")
+                {
+                    tickets = ticketService.GetAllTickets();
+                }
+                else
+                {
+                    tickets = ticketService.GetTicketsByUser(user.ID);
+                }
 
                 var ticket = tickets.FirstOrDefault(t => t.ID == ticketID);
 

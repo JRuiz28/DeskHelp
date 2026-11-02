@@ -1,0 +1,33 @@
+﻿@model List<DeskHelp.Models.TicketModel>
+@using DeskHelp.Models
+@using System.Linq
+@using System.Collections.Generic
+
+@{
+    ViewBag.Title = "Administración de tickets";
+    var states = ViewBag.States as List<StateTicketModel>;
+}
+
+<h2>Administración de tickets</h2>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Fecha de creación</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ticket in Model)
+        {
+            <tr>
+                <td>@ticket.Title</td>
+                <td>@ticket.CreatedIn.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>
+                    @Html.ActionLink("Ver detalle", "Details", new { id = ticket.ID }, new { @class = "btn btn-info btn-sm" } )
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

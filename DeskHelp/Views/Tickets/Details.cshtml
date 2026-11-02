@@ -5,13 +5,24 @@
 @{
     ViewBag.Title = "Detalle del ticket";
     var comments = ViewBag.Comments as List<CommentModel>;
+    var currentUser = Session["User"] as UserModel;
 }
 
 <div>
-    <a href="@Url.Action("Index")" class="btn btn-primary" title="Regresar">
-        <span class="glyphicon glyphicon-arrow-left"></span>
-        Regresar
-    </a>
+    @if (currentUser.Role == "Administrador")
+    {
+        <a href="@Url.Action("AdminIndex", "Tickets")" class="btn btn-primary" title="Regresar">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+            Regresar
+        </a>
+    }
+    else
+    {
+        <a href="@Url.Action("Index", "Tickets")" class="btn btn-primary" title="Regresar">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+            Regresar
+        </a>
+    }
 </div>
 <br />
 
@@ -49,13 +60,15 @@
 {
     foreach (var comment in comments)
     {
-        <div class="panel panel-info">
+        var isCurrentUser = comment.UserID == currentUser.ID;
+
+        <div class="panel @(isCurrentUser ? "panel-primary" : "panel-default")">
             <div class="panel-heading">
                 <strong>@comment.UserName</strong>
             </div>
 
             <div class="panel-body"> @comment.Text </div>
-            
+
             <div class="panel-footer">
                 Envíado el @comment.CreatedIn.ToString("dd/MM/yyyy HH:mm")
             </div>
