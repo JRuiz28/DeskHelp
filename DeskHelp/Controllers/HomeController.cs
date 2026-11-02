@@ -17,6 +17,5 @@ namespace DeskHelp.Controllers
 
             return View();
         }
-
     }
 }

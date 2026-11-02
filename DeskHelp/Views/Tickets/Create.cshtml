@@ -1,0 +1,28 @@
+﻿@model DeskHelp.Models.TicketModel
+
+@{
+    ViewBag.Title = "Crear ticket";
+}
+
+<h2>Crear ticket</h2>
+
+@using (Html.BeginForm("Create", "Tickets", FormMethod.Post))
+{
+    <div class="form-group">
+        <label for="Title">Título:</label>
+        @Html.TextBoxFor(ticket => ticket.Title, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label for="Description">Descripción:</label>
+        @Html.TextAreaFor(ticket => ticket.Description, new { @class = "form-control", rows = 4 })
+    </div>
+
+    <div class="form-group">
+        <label for="Category">Categoría:</label>
+        @Html.TextBoxFor(ticket => ticket.Category, new { @class = "form-control" })
+    </div>
+    
+    <button type="submit" class="btn btn-primary"> Crear ticket </button>
+    @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-danger" })
+}

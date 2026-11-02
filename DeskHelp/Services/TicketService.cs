@@ -10,10 +10,12 @@ namespace DeskHelp.Services
     public class TicketService
     {
         private ticketTableAdapter ticketAdapter;
+        private stateTicketTableAdapter stateAdapter;
 
         public TicketService()
         {
             ticketAdapter = new ticketTableAdapter();
+            stateAdapter = new stateTicketTableAdapter();
         }
 
         public List<TicketModel> GetTicketsByUser(int userID)
@@ -38,6 +40,31 @@ namespace DeskHelp.Services
             }
 
             return tickets;
+        }
+
+        public void CreateTicket(TicketModel ticket)
+        {
+            ticketAdapter.InsertTicket(ticket.Title, ticket.Description, ticket.UserID, ticket.Category);
+        }
+
+
+        //Function for rename join state
+        public List<StateTicketModel> GetAllStates()
+        {
+            var statesData = stateAdapter.GetData();
+
+            List<StateTicketModel> states = new List<StateTicketModel>();
+
+            foreach (var state in statesData)
+            {
+                states.Add(new StateTicketModel
+                {
+                    ID = state.pk_state_id,
+                    Name = state.name
+                });
+            }
+
+            return states;
         }
     }
 }

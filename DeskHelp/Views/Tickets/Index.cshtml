@@ -7,14 +7,16 @@
 
 <h2>Mis tickets</h2>
 
+<br />
+
+@Html.ActionLink("Crear nuevo ticket", "Create", "Tickets", null, new { @class = "btn btn-success" })
+
 @if (Model != null && Model.Any())
 {
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Título</th>
-                <th>Categoría</th>
                 <th>Descripción</th>
                 <th>Fecha de creación</th>
                 <th>Acciones</th>
@@ -25,15 +27,11 @@
             @foreach (var ticket in Model)
             {
                 <tr>
-                    <td>@ticket.ID</td>
                     <td>@ticket.Title</td>
-                    <td>@ticket.Category</td>
                     <td>@ticket.Description</td>
                     <td>@ticket.CreatedIn.ToString("dd/MM/yyyy")</td>
                     <td>
-                        <button class="btn btn-primary btn-sm">
-                            Ver
-                        </button>
+                        @Html.ActionLink("Ver detalle", "Details", new { id = ticket.ID }, new { @class = "btn btn-info btn-sm" })
                     </td>
                 </tr>
             }

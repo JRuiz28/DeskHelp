@@ -1440,6 +1440,8 @@ namespace DeskHelp.DataSets {
             
             private global::System.Data.DataColumn columncreatedIn;
             
+            private global::System.Data.DataColumn columnuserName;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public commentDataTable() {
@@ -1515,6 +1517,14 @@ namespace DeskHelp.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn userNameColumn {
+                get {
+                    return this.columnuserName;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1550,14 +1560,15 @@ namespace DeskHelp.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public commentRow AddcommentRow(int pk_comment_id, ticketRow parentticketRowByFK_ticket_id, userRow parentuserRowByFK_user_id, string text, System.DateTime createdIn) {
+            public commentRow AddcommentRow(int pk_comment_id, ticketRow parentticketRowByFK_ticket_id, userRow parentuserRowByFK_user_id, string text, System.DateTime createdIn, string userName) {
                 commentRow rowcommentRow = ((commentRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         pk_comment_id,
                         null,
                         null,
                         text,
-                        createdIn};
+                        createdIn,
+                        userName};
                 if ((parentticketRowByFK_ticket_id != null)) {
                     columnValuesArray[1] = parentticketRowByFK_ticket_id[0];
                 }
@@ -1598,6 +1609,7 @@ namespace DeskHelp.DataSets {
                 this.columnfk_user_id = base.Columns["fk_user_id"];
                 this.columntext = base.Columns["text"];
                 this.columncreatedIn = base.Columns["createdIn"];
+                this.columnuserName = base.Columns["userName"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1613,6 +1625,8 @@ namespace DeskHelp.DataSets {
                 base.Columns.Add(this.columntext);
                 this.columncreatedIn = new global::System.Data.DataColumn("createdIn", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columncreatedIn);
+                this.columnuserName = new global::System.Data.DataColumn("userName", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnuserName);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnpk_comment_id}, true));
                 this.columnpk_comment_id.AllowDBNull = false;
@@ -2235,6 +2249,22 @@ namespace DeskHelp.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string userName {
+                get {
+                    try {
+                        return ((string)(this[this.tablecomment.userNameColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'userName\' de la tabla \'comment\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablecomment.userNameColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public ticketRow ticketRow {
                 get {
                     return ((ticketRow)(this.GetParentRow(this.Table.ParentRelations["FK_ticket_id"])));
@@ -2253,6 +2283,18 @@ namespace DeskHelp.DataSets {
                 set {
                     this.SetParentRow(value, this.Table.ParentRelations["FK_user_id"]);
                 }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsuserNameNull() {
+                return this.IsNull(this.tablecomment.userNameColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetuserNameNull() {
+                this[this.tablecomment.userNameColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -2974,7 +3016,7 @@ namespace DeskHelp.DataSets.HelpDeskDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[2];
+            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[3];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = "SELECT pk_ticket_id, title, description, fk_user_id_creator, fk_user_id_assigned," +
@@ -2982,10 +3024,39 @@ namespace DeskHelp.DataSets.HelpDeskDataSetTableAdapters {
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = "SELECT *\nFROM dbo.ticket\n WHERE fk_user_id_creator = @UserID \nORDER BY createdIn " +
-                "DESC";
+            this._commandCollection[1].CommandText = "SELECT *\r\nFROM dbo.ticket \r\nWHERE fk_user_id_creator = @UserID\r\nORDER BY createdI" +
+                "n DESC;";
             this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UserID", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "fk_user_id_creator", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[2].Connection = this.Connection;
+            this._commandCollection[2].CommandText = @"INSERT INTO dbo.ticket
+(
+    title,
+    description,
+    fk_user_id_creator,
+    fk_user_id_assigned,
+    fk_state_id,
+    category,
+    createdIn,
+    last_update
+)
+VALUES
+(
+    @Title,
+    @Description,
+    @UserID,
+    NULL,
+    1,
+    @Category,
+    GETDATE(),
+    GETDATE()
+)";
+            this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Title", global::System.Data.SqlDbType.NVarChar, 150, global::System.Data.ParameterDirection.Input, 0, 0, "title", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Description", global::System.Data.SqlDbType.NVarChar, 2147483647, global::System.Data.ParameterDirection.Input, 0, 0, "description", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UserID", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "fk_user_id_creator", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Category", global::System.Data.SqlDbType.NVarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "category", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3197,6 +3268,48 @@ namespace DeskHelp.DataSets.HelpDeskDataSetTableAdapters {
         public virtual int Update(string title, string description, int fk_user_id_creator, global::System.Nullable<int> fk_user_id_assigned, int fk_state_id, string category, System.DateTime createdIn, System.DateTime last_update, int Original_pk_ticket_id) {
             return this.Update(Original_pk_ticket_id, title, description, fk_user_id_creator, fk_user_id_assigned, fk_state_id, category, createdIn, last_update, Original_pk_ticket_id);
         }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, false)]
+        public virtual int InsertTicket(string Title, string Description, int UserID, string Category) {
+            global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[2];
+            if ((Title == null)) {
+                throw new global::System.ArgumentNullException("Title");
+            }
+            else {
+                command.Parameters[0].Value = ((string)(Title));
+            }
+            if ((Description == null)) {
+                throw new global::System.ArgumentNullException("Description");
+            }
+            else {
+                command.Parameters[1].Value = ((string)(Description));
+            }
+            command.Parameters[2].Value = ((int)(UserID));
+            if ((Category == null)) {
+                throw new global::System.ArgumentNullException("Category");
+            }
+            else {
+                command.Parameters[3].Value = ((string)(Category));
+            }
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            int returnValue;
+            try {
+                returnValue = command.ExecuteNonQuery();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            return returnValue;
+        }
     }
     
     /// <summary>
@@ -3355,11 +3468,15 @@ namespace DeskHelp.DataSets.HelpDeskDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
+            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[2];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = "SELECT pk_state_id, name FROM dbo.stateTicket";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[1].Connection = this.Connection;
+            this._commandCollection[1].CommandText = "SELECT\r\n    pk_state_id,\r\n    name\r\nFROM dbo.stateTicket;";
+            this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3381,6 +3498,17 @@ namespace DeskHelp.DataSets.HelpDeskDataSetTableAdapters {
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
         public virtual HelpDeskDataSet.stateTicketDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
+            HelpDeskDataSet.stateTicketDataTable dataTable = new HelpDeskDataSet.stateTicketDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual HelpDeskDataSet.stateTicketDataTable GetAllStates() {
+            this.Adapter.SelectCommand = this.CommandCollection[1];
             HelpDeskDataSet.stateTicketDataTable dataTable = new HelpDeskDataSet.stateTicketDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
@@ -3629,6 +3757,7 @@ namespace DeskHelp.DataSets.HelpDeskDataSetTableAdapters {
             tableMapping.ColumnMappings.Add("fk_user_id", "fk_user_id");
             tableMapping.ColumnMappings.Add("text", "text");
             tableMapping.ColumnMappings.Add("createdIn", "createdIn");
+            tableMapping.ColumnMappings.Add("userName", "userName");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
@@ -3637,26 +3766,25 @@ namespace DeskHelp.DataSets.HelpDeskDataSetTableAdapters {
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_pk_comment_id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "pk_comment_id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[comment] ([pk_comment_id], [fk_ticket_id], [fk_user_id], [text" +
-                "], [createdIn]) VALUES (@pk_comment_id, @fk_ticket_id, @fk_user_id, @text, @crea" +
-                "tedIn)";
+            this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[comment] ([fk_ticket_id], [fk_user_id], [text], [createdIn], [" +
+                "userName]) VALUES (@fk_ticket_id, @fk_user_id, @text, @createdIn, @userName)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@pk_comment_id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "pk_comment_id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@fk_ticket_id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "fk_ticket_id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@fk_user_id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "fk_user_id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@text", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "text", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@createdIn", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "createdIn", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@userName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "userName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = "UPDATE [dbo].[comment] SET [pk_comment_id] = @pk_comment_id, [fk_ticket_id] = @fk" +
-                "_ticket_id, [fk_user_id] = @fk_user_id, [text] = @text, [createdIn] = @createdIn" +
-                " WHERE (([pk_comment_id] = @Original_pk_comment_id))";
+            this._adapter.UpdateCommand.CommandText = "UPDATE [dbo].[comment] SET [fk_ticket_id] = @fk_ticket_id, [fk_user_id] = @fk_use" +
+                "r_id, [text] = @text, [createdIn] = @createdIn, [userName] = @userName WHERE (([" +
+                "pk_comment_id] = @Original_pk_comment_id))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@pk_comment_id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "pk_comment_id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@fk_ticket_id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "fk_ticket_id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@fk_user_id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "fk_user_id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@text", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "text", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@createdIn", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "createdIn", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@userName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "userName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_pk_comment_id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "pk_comment_id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
         }
         
@@ -3670,11 +3798,29 @@ namespace DeskHelp.DataSets.HelpDeskDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
+            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[3];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT pk_comment_id, fk_ticket_id, fk_user_id, text, createdIn FROM dbo.comment";
+            this._commandCollection[0].CommandText = "SELECT pk_comment_id, fk_ticket_id, fk_user_id, text, createdIn, userName FROM db" +
+                "o.comment";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[1].Connection = this.Connection;
+            this._commandCollection[1].CommandText = "SELECT\r\n    pk_comment_id,\r\n    fk_ticket_id,\r\n    fk_user_id,\r\n    [text],\r\n    " +
+                "createdIn,\r\n    userName\r\nFROM dbo.comment\r\nWHERE fk_ticket_id = @TicketID\r\nORDE" +
+                "R BY createdIn ASC;";
+            this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@TicketID", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "fk_ticket_id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[2].Connection = this.Connection;
+            this._commandCollection[2].CommandText = "INSERT INTO dbo.comment\r\n(\r\n    fk_ticket_id,\r\n    fk_user_id,\r\n    [text],\r\n    " +
+                "createdIn,\r\n    userName\r\n)\r\nVALUES\r\n(\r\n    @TicketID,\r\n    @UserID,\r\n    @Text," +
+                "\r\n    GETDATE(),\r\n    @UserName\r\n);";
+            this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@TicketID", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "fk_ticket_id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UserID", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "fk_user_id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Text", global::System.Data.SqlDbType.NVarChar, 2147483647, global::System.Data.ParameterDirection.Input, 0, 0, "text", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UserName", global::System.Data.SqlDbType.NVarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "userName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3696,6 +3842,18 @@ namespace DeskHelp.DataSets.HelpDeskDataSetTableAdapters {
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
         public virtual HelpDeskDataSet.commentDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
+            HelpDeskDataSet.commentDataTable dataTable = new HelpDeskDataSet.commentDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual HelpDeskDataSet.commentDataTable GetCommentsByTicketID(int TicketID) {
+            this.Adapter.SelectCommand = this.CommandCollection[1];
+            this.Adapter.SelectCommand.Parameters[0].Value = ((int)(TicketID));
             HelpDeskDataSet.commentDataTable dataTable = new HelpDeskDataSet.commentDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
@@ -3756,17 +3914,22 @@ namespace DeskHelp.DataSets.HelpDeskDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(int pk_comment_id, int fk_ticket_id, int fk_user_id, string text, System.DateTime createdIn) {
-            this.Adapter.InsertCommand.Parameters[0].Value = ((int)(pk_comment_id));
-            this.Adapter.InsertCommand.Parameters[1].Value = ((int)(fk_ticket_id));
-            this.Adapter.InsertCommand.Parameters[2].Value = ((int)(fk_user_id));
+        public virtual int Insert(int fk_ticket_id, int fk_user_id, string text, System.DateTime createdIn, string userName) {
+            this.Adapter.InsertCommand.Parameters[0].Value = ((int)(fk_ticket_id));
+            this.Adapter.InsertCommand.Parameters[1].Value = ((int)(fk_user_id));
             if ((text == null)) {
                 throw new global::System.ArgumentNullException("text");
             }
             else {
-                this.Adapter.InsertCommand.Parameters[3].Value = ((string)(text));
+                this.Adapter.InsertCommand.Parameters[2].Value = ((string)(text));
             }
-            this.Adapter.InsertCommand.Parameters[4].Value = ((System.DateTime)(createdIn));
+            this.Adapter.InsertCommand.Parameters[3].Value = ((System.DateTime)(createdIn));
+            if ((userName == null)) {
+                this.Adapter.InsertCommand.Parameters[4].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[4].Value = ((string)(userName));
+            }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -3787,17 +3950,22 @@ namespace DeskHelp.DataSets.HelpDeskDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(int pk_comment_id, int fk_ticket_id, int fk_user_id, string text, System.DateTime createdIn, int Original_pk_comment_id) {
-            this.Adapter.UpdateCommand.Parameters[0].Value = ((int)(pk_comment_id));
-            this.Adapter.UpdateCommand.Parameters[1].Value = ((int)(fk_ticket_id));
-            this.Adapter.UpdateCommand.Parameters[2].Value = ((int)(fk_user_id));
+        public virtual int Update(int fk_ticket_id, int fk_user_id, string text, System.DateTime createdIn, string userName, int Original_pk_comment_id) {
+            this.Adapter.UpdateCommand.Parameters[0].Value = ((int)(fk_ticket_id));
+            this.Adapter.UpdateCommand.Parameters[1].Value = ((int)(fk_user_id));
             if ((text == null)) {
                 throw new global::System.ArgumentNullException("text");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(text));
+                this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(text));
             }
-            this.Adapter.UpdateCommand.Parameters[4].Value = ((System.DateTime)(createdIn));
+            this.Adapter.UpdateCommand.Parameters[3].Value = ((System.DateTime)(createdIn));
+            if ((userName == null)) {
+                this.Adapter.UpdateCommand.Parameters[4].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[4].Value = ((string)(userName));
+            }
             this.Adapter.UpdateCommand.Parameters[5].Value = ((int)(Original_pk_comment_id));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -3818,9 +3986,38 @@ namespace DeskHelp.DataSets.HelpDeskDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(int fk_ticket_id, int fk_user_id, string text, System.DateTime createdIn, int Original_pk_comment_id) {
-            return this.Update(Original_pk_comment_id, fk_ticket_id, fk_user_id, text, createdIn, Original_pk_comment_id);
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, false)]
+        public virtual int InsertComment(int TicketID, int UserID, string Text, string UserName) {
+            global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[2];
+            command.Parameters[0].Value = ((int)(TicketID));
+            command.Parameters[1].Value = ((int)(UserID));
+            if ((Text == null)) {
+                throw new global::System.ArgumentNullException("Text");
+            }
+            else {
+                command.Parameters[2].Value = ((string)(Text));
+            }
+            if ((UserName == null)) {
+                command.Parameters[3].Value = global::System.DBNull.Value;
+            }
+            else {
+                command.Parameters[3].Value = ((string)(UserName));
+            }
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            int returnValue;
+            try {
+                returnValue = command.ExecuteNonQuery();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            return returnValue;
         }
     }
     

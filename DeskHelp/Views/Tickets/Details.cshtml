@@ -1,0 +1,95 @@
+﻿@model DeskHelp.Models.TicketModel
+@using DeskHelp.Models
+@using System.Linq
+@using System.Collections.Generic
+@{
+    ViewBag.Title = "Detalle del ticket";
+    var comments = ViewBag.Comments as List<CommentModel>;
+}
+
+<div>
+    <a href="@Url.Action("Index")" class="btn btn-primary" title="Regresar">
+        <span class="glyphicon glyphicon-arrow-left"></span>
+        Regresar
+    </a>
+</div>
+<br />
+
+
+<div class="text-center">
+    <h1><strong>@Model.Title</strong></h1>
+
+    <p class="text-muted">
+        Ticket
+    </p>
+
+    <br />
+</div>
+
+<div>
+    <p><strong>Descripción:</strong></p>
+    <p>@Model.Description</p>
+
+    <p><strong>Categoría:</strong></p>
+    <p> @Model.Category</p>
+
+    <p><strong>Estado:</strong></p>
+    <p>@(((List<DeskHelp.Models.StateTicketModel>)ViewBag.States).FirstOrDefault(s => s.ID == Model.StateID)?.Name)</p>
+
+    <p><strong>Fecha de creación:</strong></p>
+    <p> @Model.CreatedIn</p>
+</div>
+
+
+<hr />
+
+<h3>Comentarios</h3>
+
+@if (comments != null && comments.Count > 0)
+{
+    foreach (var comment in comments)
+    {
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <strong>@comment.UserName</strong>
+            </div>
+
+            <div class="panel-body"> @comment.Text </div>
+            
+            <div class="panel-footer">
+                Envíado el @comment.CreatedIn.ToString("dd/MM/yyyy HH:mm")
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-info">
+        Todavía no hay comentarios para este ticket.
+    </div>
+}
+
+<hr />
+
+<h3>Agregar comentario</h3>
+
+@using (Html.BeginForm("AddComment", "Tickets", FormMethod.Post))
+{
+    @Html.Hidden("ticketID", Model.ID)
+
+    <div class="form-group">
+        <label for="text">Comentario:</label>
+
+        <textarea name="text"
+                  id="text"
+                  class="form-control"
+                  rows="4"
+                  placeholder="Escribe tu comentario..."
+                  required></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        <span class="glyphicon glyphicon-send"></span>
+        Enviar comentario
+    </button>
+}
