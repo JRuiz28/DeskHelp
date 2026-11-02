@@ -1,0 +1,48 @@
+﻿@model IEnumerable<DeskHelp.Models.TicketModel>
+@using System.Linq
+
+@{
+    ViewBag.Title = "Mis tickets";
+}
+
+<h2>Mis tickets</h2>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Categoría</th>
+                <th>Descripción</th>
+                <th>Fecha de creación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var ticket in Model)
+            {
+                <tr>
+                    <td>@ticket.ID</td>
+                    <td>@ticket.Title</td>
+                    <td>@ticket.Category</td>
+                    <td>@ticket.Description</td>
+                    <td>@ticket.CreatedIn.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm">
+                            Ver
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        No tienes tickets registrados.
+    </div>
+}
