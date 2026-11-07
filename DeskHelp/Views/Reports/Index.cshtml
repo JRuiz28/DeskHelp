@@ -1,0 +1,80 @@
+﻿@model List<DeskHelp.Models.ReportModel>
+
+@{
+    ViewBag.Title = "Reporte de tickets";
+}
+
+<div>
+    <a href="@Url.Action("Index", "Home")" class="btn btn-primary" title="Regresar">
+        <span class="glyphicon glyphicon-arrow-left"></span>
+        Regresar
+    </a>
+</div>
+
+<div class="text-center">
+    <h1><strong>Reporte</strong></h1>
+
+    <p class="text-muted">
+        Genere reporte de ticket por rango de fechas
+    </p>
+
+    <br />
+</div>
+
+@using (Html.BeginForm("Index", "Reports", FormMethod.Post))
+{
+    <div class="form-group">
+        <label>Fecha inicial:</label>
+        <input type="date" name="startDate" class="form-control" value="@ViewBag.StartDate" required />
+    </div>
+
+    <div class="form-group">
+        <label>Fecha final:</label>
+        <input type="date" name="endDate" class="form-control" value="@ViewBag.EndDate" required />
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary">
+        Generar reporte
+    </button>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+@if (Model != null)
+{
+    <hr />
+    <h3>Resultados</h3>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Estado</th>
+                <th>Cantidad de tickets</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @(((List<DeskHelp.Models.StateTicketModel>)ViewBag.States).FirstOrDefault(s => s.ID == item.StateID)?.Name)
+                    </td>
+                    <td>
+                        @item.Count
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+    <label>Total de tickets:</label>
+    <p>@Model.Sum(x => x.Count)</p>
+}

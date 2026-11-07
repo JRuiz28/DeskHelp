@@ -6,7 +6,15 @@
     ViewBag.Title = "Editar ticket";
 }
 
-<h2>Editar ticket</h2>
+<div class="text-center">
+    <h1><strong>Editar ticket</strong></h1>
+
+    <p class="text-muted">
+        Modifica el ticket
+    </p>
+
+    <br />
+</div>
 
 @using (Html.BeginForm("Edit", "Tickets", FormMethod.Post))
 {
@@ -20,12 +28,11 @@
     <div class="form-group">
         <label>Estado:</label>
 
-        @Html.DropDownList("stateID", new SelectList((List<StateTicketModel>) ViewBag.States, "ID", "Name", Model.StateID), new { @class = "form-control" })
+        @Html.DropDownList("stateID", new SelectList((List<StateTicketModel>)ViewBag.States, "ID", "Name", Model.StateID), new { @class = "form-control" })
     </div>
 
     <div class="form-group">
         <label>Responsable o encargado:</label>
-
 
         @Html.DropDownListFor(model => model.AssignedUserID, (IEnumerable<SelectListItem>) new SelectList(ViewBag.Responsibles, "ID", "Name", Model.AssignedUserID),
             "-- Seleccione un responsable --",

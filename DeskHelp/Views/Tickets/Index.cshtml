@@ -1,13 +1,21 @@
 ﻿@model IEnumerable<DeskHelp.Models.TicketModel>
+@using DeskHelp.Models
 @using System.Linq
 
 @{
     ViewBag.Title = "Mis tickets";
 }
 
-<h2>Mis tickets</h2>
 
-<br />
+<div class="text-center">
+    <h1><strong>Mis tickets</strong></h1>
+
+    <p class="text-muted">
+        Visualice sus tickets
+    </p>
+
+    <br />
+</div>
 
 @Html.ActionLink("Crear nuevo ticket", "Create", "Tickets", null, new { @class = "btn btn-success" })
 
@@ -17,7 +25,7 @@
         <thead>
             <tr>
                 <th>Título</th>
-                <th>Fecha de creación</th>
+                <th>Estado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -27,7 +35,9 @@
             {
                 <tr>
                     <td>@ticket.Title</td>
-                    <td>@ticket.CreatedIn.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        @(((List<StateTicketModel>)ViewBag.States).FirstOrDefault(s => s.ID == ticket.StateID)?.Name)
+                    </td>
                     <td>
                         @Html.ActionLink("Ver detalle", "Details", new { id = ticket.ID }, new { @class = "btn btn-info btn-sm" })
                     </td>

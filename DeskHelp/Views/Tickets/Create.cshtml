@@ -4,7 +4,15 @@
     ViewBag.Title = "Crear ticket";
 }
 
-<h2>Crear ticket</h2>
+<div class="text-center">
+    <h1><strong>Crear ticket</strong></h1>
+
+    <p class="text-muted">
+        Crea un nuevo ticket
+    </p>
+
+    <br />
+</div>
 
 @using (Html.BeginForm("Create", "Tickets", FormMethod.Post))
 {

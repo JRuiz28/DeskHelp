@@ -22,6 +22,8 @@ namespace DeskHelp.Controllers
             UserModel user = Session["User"] as UserModel;
             List<TicketModel> tickets = ticketService.GetTicketsByUser(user.ID);
 
+            ViewBag.States = ticketService.GetAllStates();
+
             return View(tickets);
         }
 
