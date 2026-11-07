@@ -48,26 +48,6 @@ namespace DeskHelp.Services
             ticketAdapter.InsertTicket(ticket.Title, ticket.Description, ticket.UserID, ticket.Category);
         }
 
-
-        //Function for rename join state
-        public List<StateTicketModel> GetAllStates()
-        {
-            var statesData = stateAdapter.GetData();
-
-            List<StateTicketModel> states = new List<StateTicketModel>();
-
-            foreach (var state in statesData)
-            {
-                states.Add(new StateTicketModel
-                {
-                    ID = state.pk_state_id,
-                    Name = state.name
-                });
-            }
-
-            return states;
-        }
-
         //---------------- ADMIN ROLE -----------------
         public List<TicketModel> GetAllTickets()
         {
@@ -101,6 +81,48 @@ namespace DeskHelp.Services
         public void UpdateTicketAssignment(int ticketID, int stateID, int? assignedUserID)
         {
             ticketAdapter.UpdateTicketAssignment(stateID, assignedUserID, ticketID);
+        }
+
+        public List<TicketModel> SearchTickets(int ticketID, string name, int stateID)
+        {
+            List<TicketModel> tickets = GetAllTickets();
+
+            if (ticketID > 0)
+            {
+                tickets = tickets.Where(t => t.ID == ticketID).ToList();
+            }
+
+            if (name != null && name != "")
+            {
+                tickets = tickets.Where(t => t.Title.ToLower().Contains(name.ToLower())).ToList();
+            }
+
+            if (stateID > 0)
+            {
+                tickets = tickets.Where(t => t.StateID == stateID).ToList();
+            }
+
+            return tickets;
+        }
+
+
+        //Function for rename join state
+        public List<StateTicketModel> GetAllStates()
+        {
+            var statesData = stateAdapter.GetData();
+
+            List<StateTicketModel> states = new List<StateTicketModel>();
+
+            foreach (var state in statesData)
+            {
+                states.Add(new StateTicketModel
+                {
+                    ID = state.pk_state_id,
+                    Name = state.name
+                });
+            }
+
+            return states;
         }
     }
 }

@@ -195,6 +195,8 @@
     <Content Include="Views\Tickets\AdminIndex.cshtml" />
     <Content Include="Views\Tickets\Edit.cshtml" />
     <Content Include="Views\Reports\Index.cshtml" />
+    <Content Include="Views\Tickets\Search.cshtml" />
+    <Content Include="Views\Tickets\_TicketSearchResults.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

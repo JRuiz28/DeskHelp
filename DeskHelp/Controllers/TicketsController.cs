@@ -108,6 +108,26 @@ namespace DeskHelp.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult Search()
+        {
+            if (ValidateUser(true) != null) return ValidateUser(true);
+
+            ViewBag.States = ticketService.GetAllStates();
+
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult SearchTickets(int ticketID = 0, string name = "", int stateID = 0)
+        {
+            if (ValidateUser(true) != null) return ValidateUser(true);
+
+            var tickets = ticketService.SearchTickets(ticketID, name, stateID);
+
+            return PartialView("_TicketSearchResults", tickets);
+        }
+
         // -----------------------------------------------------
 
         [HttpGet]

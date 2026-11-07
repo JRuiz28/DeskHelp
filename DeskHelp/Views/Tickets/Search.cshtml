@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "Buscar tickets";
+}
+
+<div class="text-center">
+    <h1><strong>Buscador</strong></h1>
+
+    <p class="text-muted">
+        Busca el ticket según el filtro
+    </p>
+
+    <br />
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Filtro</h3>
+
+            <div class="form-group">
+                <label for="name">Título:</label>
+                <input type="text" id="name" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="ticketID">Número de ticket:</label>
+                <input type="number" id="ticketID" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label>Estado:</label>
+                <div>
+                    <label>
+                        <input type="radio" name="stateID" value="0" checked />
+                        Todos
+                    </label>
+
+                    @foreach (var state in (List<DeskHelp.Models.StateTicketModel>)ViewBag.States)
+                    {
+                        <label>
+                            <input type="radio" name="stateID" value="@state.ID" />
+                            @state.Name
+                        </label>
+                    }
+                </div>
+            </div>
+
+            <button type="button" id="btnSearch" class="btn btn-primary">
+                <span class="glyphicon glyphicon-search"></span>
+                Buscar
+            </button>
+        </div>
+
+        <div class="col-md-8">
+            <br /><br />
+            <div id="searchResults">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            function searchTickets() {
+                var ticketID = $("#ticketID").val() || 0;
+                var name = $("#name").val() || "";
+                var stateID = $("input[name='stateID']:checked").val() || 0;
+
+                $.ajax({
+                    url: '@Url.Action("SearchTickets", "Tickets")',
+                    type: 'GET',
+                    data: {
+                        ticketID: ticketID,
+                        name: name,
+                        stateID: stateID
+                    },
+                    success: function (result) {
+                        $("#searchResults").html(result);
+                    },
+                    error: function () {
+                        alert("Error en el Ajax");
+                    }
+                });
+            }
+
+            searchTickets();
+
+            //Event
+            $("#btnSearch").on("click", function () {
+                searchTickets();
+            });
+        });
+    </script>
+}
