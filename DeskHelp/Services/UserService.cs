@@ -50,5 +50,23 @@ namespace DeskHelp.Services
                 State = user.State
             };
         }
+
+        public List<UserModel> GetUsersByRole(string role)
+        {
+            var users = userAdapter.GetDataByRole(role);
+
+            List<UserModel> usersList = new List<UserModel>();
+
+            foreach (var user in users)
+            {
+                usersList.Add(new UserModel
+                {
+                    ID = user.pk_user_id,
+                    Name = user.name
+                });
+            }
+
+            return usersList;
+        }
     }
 }

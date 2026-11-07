@@ -11,6 +11,7 @@ namespace DeskHelp.Controllers
     public class TicketsController :  Controller
     {
         private TicketService ticketService = new TicketService();
+        private UserService userService = new UserService();
         private CommentService commentService = new CommentService();
 
         //---------------- USER ROLE -----------------
@@ -62,31 +63,6 @@ namespace DeskHelp.Controllers
             return View(tickets);
         }
 
-        [HttpPost]
-        public ActionResult UpdateState(int ticketID, int stateID)
-        {
-            try {
-                if (ValidateUser(true) != null) return ValidateUser(true);
-
-                List<TicketModel> tickets = ticketService.GetAllTickets();
-                TicketModel ticket = tickets.FirstOrDefault(t => t.ID == ticketID);
-                if (ticket == null)
-                {
-                    return RedirectToAction("AdminIndex");
-                }
-
-                List<StateTicketModel> states = ticketService.GetAllStates();
-                ticketService.UpdateTicketState(ticketID, stateID);
-                ViewBag.States = states;
-                ViewBag.Success = "El estado del ticket se actualizó correctamente";
-
-                return View("Details", ticket);
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
         [HttpGet]
         public ActionResult Edit(int id)
@@ -98,12 +74,31 @@ namespace DeskHelp.Controllers
                 var tickets = ticketService.GetAllTickets();
                 var ticket = tickets.FirstOrDefault(t => t.ID == id);
 
-                if (ticket == null)
-                    return RedirectToAction("AdminIndex");
-
                 ViewBag.States = ticketService.GetAllStates();
+                ViewBag.Responsibles = userService.GetUsersByRole("Administrador");
 
                 return View(ticket);
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Edit(TicketModel ticket)
+        {
+            try
+            {
+                if (ValidateUser(true) != null) return ValidateUser(true);
+
+                ticketService.UpdateTicketAssignment(
+                    ticket.ID,
+                    ticket.StateID,
+                    ticket.AssignedUserID
+                );
+
+                return RedirectToAction("Details", new { id = ticket.ID });
             }
             catch
             {

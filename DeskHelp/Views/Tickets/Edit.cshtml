@@ -8,9 +8,9 @@
 
 <h2>Editar ticket</h2>
 
-@using (Html.BeginForm("UpdateState", "Tickets", FormMethod.Post))
+@using (Html.BeginForm("Edit", "Tickets", FormMethod.Post))
 {
-    @Html.Hidden("ticketID", Model.ID)
+    @Html.Hidden("ticketID", Model.ID);
 
     <div class="form-group">
         <label>Título:</label>
@@ -20,17 +20,22 @@
     <div class="form-group">
         <label>Estado:</label>
 
-        @Html.DropDownList( "stateID", new SelectList((List<StateTicketModel>)ViewBag.States, "ID", "Name", Model.StateID), new { @class = "form-control" })
+        @Html.DropDownList("stateID", new SelectList((List<StateTicketModel>) ViewBag.States, "ID", "Name", Model.StateID), new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label>Responsable o encargado:</label>
+
+
+        @Html.DropDownListFor(model => model.AssignedUserID, (IEnumerable<SelectListItem>) new SelectList(ViewBag.Responsibles, "ID", "Name", Model.AssignedUserID),
+            "-- Seleccione un responsable --",
+            new { @class = "form-control" }
+        )
     </div>
 
     <button type="submit" class="btn btn-primary">
         Actualizar datos
     </button>
 
-    @Html.ActionLink(
-        "Cancelar",
-        "Details",
-        new { id = Model.ID },
-        new { @class = "btn btn-default" }
-    )
+    @Html.ActionLink("Cancelar", "Details", new { id = Model.ID }, new { @class = "btn btn-default" })
 }

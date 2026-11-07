@@ -97,5 +97,10 @@ namespace DeskHelp.Services
         {
             ticketAdapter.UpdateTicketState(stateID, ticketID);
         }
+
+        public void UpdateTicketAssignment(int ticketID, int stateID, int? assignedUserID)
+        {
+            ticketAdapter.UpdateTicketAssignment(stateID, assignedUserID, ticketID);
+        }
     }
 }
