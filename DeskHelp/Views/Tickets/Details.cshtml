@@ -2,10 +2,21 @@
 @using DeskHelp.Models
 @using System.Linq
 @using System.Collections.Generic
+@using System.Web.Mvc
 @{
     ViewBag.Title = "Detalle del ticket";
     var comments = ViewBag.Comments as List<CommentModel>;
     var currentUser = Session["User"] as UserModel;
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        @ViewBag.Success
+    </div>
 }
 
 <div>
@@ -26,6 +37,13 @@
 </div>
 <br />
 
+@if (currentUser.Role == "Administrador")
+{
+    <div>
+        @Html.ActionLink("Editar ticket", "Edit", "Tickets", new { id = Model.ID }, new { @class = "btn btn-warning" })
+    </div>
+}
+
 
 <div class="text-center">
     <h1><strong>@Model.Title</strong></h1>
@@ -44,8 +62,10 @@
     <p><strong>Categoría:</strong></p>
     <p> @Model.Category</p>
 
-    <p><strong>Estado:</strong></p>
-    <p>@(((List<DeskHelp.Models.StateTicketModel>)ViewBag.States).FirstOrDefault(s => s.ID == Model.StateID)?.Name)</p>
+    <p>
+        <strong>Estado:</strong>
+        @(((List<StateTicketModel>)ViewBag.States).FirstOrDefault(s => s.ID == Model.StateID)?.Name)
+    </p>
 
     <p><strong>Fecha de creación:</strong></p>
     <p> @Model.CreatedIn</p>

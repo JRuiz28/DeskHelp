@@ -13,18 +13,13 @@ namespace DeskHelp.Controllers
         private TicketService ticketService = new TicketService();
         private CommentService commentService = new CommentService();
 
-
         //---------------- USER ROLE -----------------
         public ActionResult Index()
         {
-            if (Session["User"] == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
+            if (ValidateUser(false) != null) return ValidateUser(false);
 
             UserModel user = Session["User"] as UserModel;
-
-            var tickets = ticketService.GetTicketsByUser(user.ID);
+            List<TicketModel> tickets = ticketService.GetTicketsByUser(user.ID);
 
             return View(tickets);
         }
@@ -32,10 +27,7 @@ namespace DeskHelp.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            if (Session["User"] == null)
-            {
-                return RedirectToAction("Login", "Account");
-            } 
+            if (ValidateUser(false) != null) return ValidateUser(false); 
 
             return View();
         }
@@ -45,15 +37,10 @@ namespace DeskHelp.Controllers
         {
             try
             {
-                if (Session["User"] == null)
-                {
-                    return RedirectToAction("Login", "Account");
-                }
+                if (ValidateUser(false) != null) return ValidateUser(false);
 
                 UserModel user = Session["User"] as UserModel;
-
                 ticket.UserID = user.ID;
-
                 ticketService.CreateTicket(ticket);
 
                 return RedirectToAction("Index");
@@ -68,24 +55,62 @@ namespace DeskHelp.Controllers
         //---------------- ADMIN ROLE -----------------
         public ActionResult AdminIndex()
         {
-            if (Session["User"] == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            UserModel user = Session["User"] as UserModel;
-
-            if (user.Role != "Administrador")
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            if (ValidateUser(true) != null) return ValidateUser(true);
 
             var tickets = ticketService.GetAllTickets();
 
             return View(tickets);
         }
 
-    
+        [HttpPost]
+        public ActionResult UpdateState(int ticketID, int stateID)
+        {
+            try {
+                if (ValidateUser(true) != null) return ValidateUser(true);
+
+                List<TicketModel> tickets = ticketService.GetAllTickets();
+                TicketModel ticket = tickets.FirstOrDefault(t => t.ID == ticketID);
+                if (ticket == null)
+                {
+                    return RedirectToAction("AdminIndex");
+                }
+
+                List<StateTicketModel> states = ticketService.GetAllStates();
+                ticketService.UpdateTicketState(ticketID, stateID);
+                ViewBag.States = states;
+                ViewBag.Success = "El estado del ticket se actualizó correctamente";
+
+                return View("Details", ticket);
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            try
+            {
+                if (ValidateUser(true) != null) return ValidateUser(true);
+
+                var tickets = ticketService.GetAllTickets();
+                var ticket = tickets.FirstOrDefault(t => t.ID == id);
+
+                if (ticket == null)
+                    return RedirectToAction("AdminIndex");
+
+                ViewBag.States = ticketService.GetAllStates();
+
+                return View(ticket);
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
         // -----------------------------------------------------
 
         [HttpGet]
@@ -93,21 +118,14 @@ namespace DeskHelp.Controllers
         {
             try
             {
-                if (Session["User"] == null)
-                {
-                    return RedirectToAction("Login", "Account");
-                }
+                if (ValidateUser(false) != null) return ValidateUser(false);
 
-                var comments = commentService.GetCommentsByTicketID(id);
-
-                var states = ticketService.GetAllStates();
-
+                List<CommentModel> comments = commentService.GetCommentsByTicketID(id);
+                List<StateTicketModel> states = ticketService.GetAllStates();
                 ViewBag.Comments = comments;
-
                 ViewBag.States = states;
 
                 UserModel user = Session["User"] as UserModel;
-
                 List<TicketModel> tickets;
 
                 if (user.Role == "Administrador")
@@ -134,13 +152,9 @@ namespace DeskHelp.Controllers
         {
             try
             {
-                if (Session["User"] == null)
-                {
-                    return RedirectToAction("Login", "Account");
-                }
+                if (ValidateUser(false) != null) return ValidateUser(false);
 
                 UserModel user = Session["User"] as UserModel;
-
                 List<TicketModel> tickets;
 
                 if (user.Role == "Administrador")
@@ -152,8 +166,7 @@ namespace DeskHelp.Controllers
                     tickets = ticketService.GetTicketsByUser(user.ID);
                 }
 
-                var ticket = tickets.FirstOrDefault(t => t.ID == ticketID);
-
+                TicketModel ticket = tickets.FirstOrDefault(t => t.ID == ticketID);
                 if (ticket == null)
                 {
                     return RedirectToAction("Index");
@@ -175,6 +188,23 @@ namespace DeskHelp.Controllers
             {
                 return View();
             }
+        }
+
+
+        private ActionResult ValidateUser(bool isAdmin)
+        {
+            if (Session["User"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            UserModel user = Session["User"] as UserModel;
+            if (isAdmin && user.Role != "Administrador")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return null;
         }
     }
 }

@@ -1,0 +1,36 @@
+﻿@model DeskHelp.Models.TicketModel
+@using DeskHelp.Models
+@using System.Collections.Generic
+
+@{
+    ViewBag.Title = "Editar ticket";
+}
+
+<h2>Editar ticket</h2>
+
+@using (Html.BeginForm("UpdateState", "Tickets", FormMethod.Post))
+{
+    @Html.Hidden("ticketID", Model.ID)
+
+    <div class="form-group">
+        <label>Título:</label>
+        <p class="form-control-static">@Model.Title</p>
+    </div>
+
+    <div class="form-group">
+        <label>Estado:</label>
+
+        @Html.DropDownList( "stateID", new SelectList((List<StateTicketModel>)ViewBag.States, "ID", "Name", Model.StateID), new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Actualizar datos
+    </button>
+
+    @Html.ActionLink(
+        "Cancelar",
+        "Details",
+        new { id = Model.ID },
+        new { @class = "btn btn-default" }
+    )
+}

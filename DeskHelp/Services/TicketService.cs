@@ -92,5 +92,10 @@ namespace DeskHelp.Services
 
             return tickets;
         }
+
+        public void UpdateTicketState(int ticketID, int stateID)
+        {
+            ticketAdapter.UpdateTicketState(stateID, ticketID);
+        }
     }
 }
